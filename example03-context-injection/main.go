@@ -62,13 +62,45 @@ func chatCompletion(ctx context.Context, model, prompt string) (string, error) {
 	if resp.StatusCode != http.StatusOK {
 		return "", fmt.Errorf("chat: status %d\n", resp.StatusCode)
 	}
-	return "", nil
+
+	var out ChatResponse
+	if err := json.NewDecoder(resp.Body).Decode(&out); err != nil {
+		return "", fmt.Errorf("decode: %w", err)
+	}
+	if len(out.Choices) == 0 {
+		return "", fmt.Errorf("chat: no choices")
+	}
+
+	return out.Choices[0].Message.Content, nil
 }
 
 func main() {
-	res, err := chatCompletion(context.Background(), "Qwen3-8B-Q8_0", "Say hello in one word.")
+
+	// question without the required context
+	ques := "In FlamApp's Skiff deploy tool, how many times is a failed upload retried before pagin on-call?"
+	res, err := chatCompletion(context.Background(), "Qwen3-8B-Q8_0", ques)
 	if err != nil {
 		panic(err)
 	}
+	fmt.Printf("que: %v\n", ques)
 	fmt.Printf("res: %v\n", res)
+
+	template := `You are a precise assistant. Answer using ONLY the context below.
+	If the answer isn't in the context, say you don't know.
+
+	Context:
+	"""
+	%s
+	"""
+
+  	Question: %s`
+
+	fact := `FlamApp's internal deploy tool, Skiff, retries a failed asset upload 7 times, waiting 2
+  seconds between attempts, before paging the on-call engineer.`
+
+	prompt := fmt.Sprintf(template, fact, ques)
+
+	hot, _ := chatCompletion(context.Background(), "Qwen3-8B-Q*_0", prompt)
+	fmt.Println("--- WITH context ---")
+	fmt.Println(hot)
 }
