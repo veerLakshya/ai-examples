@@ -7,7 +7,7 @@ import (
 	"strings"
 
 	"github.com/jackc/pgx/v5/pgxpool"
-	"github.com/veerLakshya/ai-examples/examples/example06-vector-db/docs"
+	"github.com/veerLakshya/ai-examples/examples/06-vector-db/docs"
 	"github.com/veerLakshya/ai-examples/foundation/client"
 )
 

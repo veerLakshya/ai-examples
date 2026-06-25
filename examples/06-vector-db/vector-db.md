@@ -652,7 +652,21 @@ averages across many queries to get a meaningful number.
 
 ---
 
-## Stage 5 — Product Quantization from scratch *(in progress)*
+## Stages 5 & 6 — deferred
+
+Stage 5 (Product Quantization from scratch) and stage 6 (HNSW from
+scratch) involve substantial from-scratch ML algorithm implementation —
+K-means, geometric initialization, graph construction, beam search. The
+conceptual foundation for both already lives above (worked examples,
+trade-off tables, query mechanics). Implementation deferred for now;
+revisit when the curriculum loops back to ML deep dives.
+
+The notes that follow remain as design references for if/when we do
+revisit:
+
+---
+
+## Stage 5 — Product Quantization from scratch *(deferred — notes below)*
 
 ### Conceptual shift vs stages 3 + 4
 
@@ -741,7 +755,7 @@ because the other three depend on it.
 
 ---
 
-## Stage 6 — HNSW from scratch in Go *(planned — capstone deep dive)*
+## Stage 6 — HNSW from scratch in Go *(deferred — notes below)*
 
 After stage 5, type out HNSW yourself. ~250 lines, two evenings. By
 then PQ (stage 5) + IVF (stage 4) + pgvector's HNSW observations (stage
